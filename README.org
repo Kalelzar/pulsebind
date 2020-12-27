@@ -1,0 +1,2 @@
+#+TITLE:pulsebind
+#+DESCRIPTION: A wrapper around the pulseaudio API intended for use from within other programming languages
