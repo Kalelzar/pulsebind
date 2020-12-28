@@ -17,8 +17,8 @@ struct Server {
   const char *defaultSourceName;
 };
 
-extern "C" Server get_server_info(PulseAudio &p) noexcept;
-extern "C" void delete_server(Server &s) noexcept;
+extern "C" Server getServerInfo(PulseAudio &p) noexcept;
+extern "C" void deleteServer(Server &s) noexcept;
 
 } // namespace Pulsebind
 

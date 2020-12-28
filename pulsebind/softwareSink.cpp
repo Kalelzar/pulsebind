@@ -21,8 +21,7 @@ extern "C" List getSinkInputs(PulseAudio &pa) {
   return l;
 }
 
-extern "C" SinkInput *getSoftwareSinkByName(List list,
-                                                   const char *name) {
+extern "C" SinkInput *getSinkInputByName(List list, const char *name) {
   if (!list.array)
     return nullptr;
 
@@ -36,7 +35,7 @@ extern "C" SinkInput *getSoftwareSinkByName(List list,
   return nullptr;
 }
 
-extern "C" SinkInput *getSoftwareSinkById(List list, uint32_t index) {
+extern "C" SinkInput *getSinkInputById(List list, uint32_t index) {
   if (!list.array)
     return nullptr;
   for (size_t i = 0; i < list.size; i++) {
@@ -49,8 +48,8 @@ extern "C" SinkInput *getSoftwareSinkById(List list, uint32_t index) {
   return nullptr;
 }
 
-extern "C" SinkInput *
-getSinkInputByDescription(List sinks, List clients, const char *desc) {
+extern "C" SinkInput *getSinkInputByDescription(List sinks, List clients,
+                                                const char *desc) {
   for (size_t i = 0; i < sinks.size; i++) {
     SinkInput *hs = (SinkInput *)listGet(sinks, i);
     if (!hs)
@@ -67,7 +66,7 @@ getSinkInputByDescription(List sinks, List clients, const char *desc) {
 }
 
 extern "C" void sinkInputSetVolume(PulseAudio &pa, SinkInput *sink,
-                                         uint32_t volume) {
+                                   uint32_t volume) {
 
   pa_volume_t new_volume = denormalizeVolume(volume);
 
@@ -81,7 +80,7 @@ extern "C" void sinkInputSetVolume(PulseAudio &pa, SinkInput *sink,
 }
 
 extern "C" void sinkInputSetCVolume(PulseAudio &pa, SinkInput *sink,
-                                          pa_cvolume cvol) {
+                                    pa_cvolume cvol) {
   pa_operation *set = pa_context_set_sink_input_volume(
       pa.context, sink->id, &cvol, &onSuccess, nullptr);
   pa_operation *get = pa_context_get_sink_input_info(pa.context, sink->id,
@@ -92,8 +91,7 @@ extern "C" void sinkInputSetCVolume(PulseAudio &pa, SinkInput *sink,
   pa_operation_unref(get);
 }
 
-extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink,
-                                       bool mute) {
+extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink, bool mute) {
   pa_operation *op = pa_context_set_sink_input_mute(
       pa.context, sink->id, (int)mute, &onSuccess, nullptr);
   iterate(pa, op);
@@ -101,7 +99,7 @@ extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink,
 }
 
 extern "C" void sinkInputSetSink(PulseAudio &pa, SinkInput *sink,
-                                          uint32_t hw_sink) {
+                                 uint32_t hw_sink) {
   pa_operation *set = pa_context_move_sink_input_by_index(
       pa.context, sink->id, hw_sink, &onSuccess, nullptr);
   iterate(pa, set);
@@ -109,9 +107,7 @@ extern "C" void sinkInputSetSink(PulseAudio &pa, SinkInput *sink,
   pa_operation_unref(set);
 }
 
-extern "C" void freeSinkInput(SinkInput &sink) {
-  free((void *)sink.name);
-}
+extern "C" void freeSinkInput(SinkInput &sink) { free((void *)sink.name); }
 
 extern "C" void freeSinkInputs(List &list) {
   if (!list.array)

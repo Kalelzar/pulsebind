@@ -206,7 +206,7 @@ extern "C" void deviceSetVolume(PulseAudio &pa, Device &d,
  * ~n - Name
  * ~d - Description/Client name
  * ~m - Mute status (true/false)
- * ~M - Mute status (1/0)
+ * ~M - Mute status (muted/not muted)
  * ~v - Volume Percent
  * ~V - Volume for each channel
  * ~c - Channel count
@@ -286,9 +286,11 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
         break;
       case 'M':
         if (deviceGetMute(d)) {
-          str[point++] = '1';
+          strncpy(str + point, "muted", 5);
+          point += 5;
         } else {
-          str[point++] = '0';
+          strncpy(str + point, "not muted", 9);
+          point += 9;
         }
         break;
       case 'v':

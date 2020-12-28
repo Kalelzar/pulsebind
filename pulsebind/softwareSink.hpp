@@ -20,18 +20,17 @@ struct SinkInput {
 extern "C" List getSinkInputs(PulseAudio &p);
 extern "C" SinkInput *getSinkInputByName(List list, const char *name);
 extern "C" SinkInput *getSinkInputById(List list, uint32_t index);
-extern "C" SinkInput *
-getSinkInputByDescription(List sinks, List clients, const char *desc);
+extern "C" SinkInput *getSinkInputByDescription(List sinks, List clients,
+                                                const char *desc);
 
 extern "C" void sinkInputSetVolume(PulseAudio &pa, SinkInput *sink,
-                                         uint32_t volume);
+                                   uint32_t volume);
 extern "C" void sinkInputSetCVolume(PulseAudio &pa, SinkInput *sink,
-                                          pa_cvolume cvol);
-extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink,
-                                       bool mute);
+                                    pa_cvolume cvol);
+extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink, bool mute);
 
 extern "C" void sinkInputSetSink(PulseAudio &pa, SinkInput *sink,
-                                          uint32_t hw_sink);
+                                 uint32_t hw_sink);
 
 extern "C" void freeSinkInput(SinkInput &sink);
 
