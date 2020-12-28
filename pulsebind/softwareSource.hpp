@@ -1,14 +1,14 @@
-#ifndef SOFTWARESOURCE_H
-#define SOFTWARESOURCE_H
+#ifndef SOURCEOUTPUT_H
+#define SOURCEOUTPUT_H
 
 #include "list.hpp"
 #include "pulseaudio.hpp"
 
 namespace Pulsebind {
 
-struct SoftwareSource {
+struct SourceOutput {
   uint32_t id;
-  3uint32_t source;
+  uint32_t source;
   uint32_t client;
   const char *name;
   bool mute;
@@ -17,37 +17,33 @@ struct SoftwareSource {
   int volumePercent;
 };
 
-extern "C" List get_software_sources(PulseAudio &p);
-extern "C" SoftwareSource *get_software_source_by_name(List list,
+extern "C" List getSourceOutputs(PulseAudio &p);
+extern "C" SourceOutput *getSourceOutputByName(List list,
                                                        const char *name);
-extern "C" SoftwareSource *get_software_source_by_id(List list, uint32_t index);
-extern "C" SoftwareSource *get_software_source_by_description(List sources,
+extern "C" SourceOutput *getSourceOutputById(List list, uint32_t index);
+extern "C" SourceOutput *getSourceOutputByDescription(List sources,
                                                               List clients,
                                                               const char *desc);
-  void c(int a, int v)
-  {
 
-
-
-extern "C" void software_source_set_volume(PulseAudio &pa,
-                                           SoftwareSource *source,
+extern "C" void sourceOutputSetVolume(PulseAudio &pa,
+                                           SourceOutput *source,
                                            uint32_t volume);
 
-extern "C" void software_source_set_cvolume(PulseAudio &pa,
-                                            SoftwareSource *source,
+extern "C" void sourceOutputSetCVolume(PulseAudio &pa,
+                                            SourceOutput *source,
                                             pa_cvolume cvol);
 
-extern "C" void software_source_set_mute(PulseAudio &pa, SoftwareSource *source,
+extern "C" void sourceOutputSetMute(PulseAudio &pa, SourceOutput *source,
                                          bool mute);
 
-extern "C" void software_source_set_hw_source(PulseAudio &pa,
-                                              SoftwareSource *source,
+extern "C" void sourceOutputSetSource(PulseAudio &pa,
+                                              SourceOutput *source,
                                               uint32_t hw_source);
 
-extern "C" void free_software_source(SoftwareSource &source);
+extern "C" void freeSourceOutput(SourceOutput &source);
 
-extern "C" void free_software_sources(List &list);
+extern "C" void freeSourceOutputs(List &list);
 
 } // namespace Pulsebind
 
-#endif /* SOFTWARESOURCE_H */
+#endif /* SOURCEOUTPUT_H */

@@ -7,8 +7,8 @@
 
 namespace Pulsebind {
 
-extern "C" List get_software_sinks(PulseAudio &pa) {
-  List l = new_list(4);
+extern "C" List getSinkInputs(PulseAudio &pa) {
+  List l = newList(4);
   if (!l.array)
     return l;
   pa_operation *op =
@@ -21,13 +21,13 @@ extern "C" List get_software_sinks(PulseAudio &pa) {
   return l;
 }
 
-extern "C" SoftwareSink *get_software_sink_by_name(List list,
+extern "C" SinkInput *getSoftwareSinkByName(List list,
                                                    const char *name) {
   if (!list.array)
     return nullptr;
 
   for (size_t i = 0; i < list.size; i++) {
-    SoftwareSink *hs = (SoftwareSink *)list_get(list, i);
+    SinkInput *hs = (SinkInput *)listGet(list, i);
     if (strcmp(hs->name, name) == 0) {
       return hs;
     }
@@ -36,11 +36,11 @@ extern "C" SoftwareSink *get_software_sink_by_name(List list,
   return nullptr;
 }
 
-extern "C" SoftwareSink *get_software_sink_by_id(List list, uint32_t index) {
+extern "C" SinkInput *getSoftwareSinkById(List list, uint32_t index) {
   if (!list.array)
     return nullptr;
   for (size_t i = 0; i < list.size; i++) {
-    SoftwareSink *hs = (SoftwareSink *)list_get(list, i);
+    SinkInput *hs = (SinkInput *)listGet(list, i);
     if (hs->id == index) {
       return hs;
     }
@@ -49,13 +49,13 @@ extern "C" SoftwareSink *get_software_sink_by_id(List list, uint32_t index) {
   return nullptr;
 }
 
-extern "C" SoftwareSink *
-get_software_sink_by_description(List sinks, List clients, const char *desc) {
+extern "C" SinkInput *
+getSinkInputByDescription(List sinks, List clients, const char *desc) {
   for (size_t i = 0; i < sinks.size; i++) {
-    SoftwareSink *hs = (SoftwareSink *)list_get(sinks, i);
+    SinkInput *hs = (SinkInput *)listGet(sinks, i);
     if (!hs)
       continue;
-    Client *client = (Client *)get_client_by_id(clients, hs->client);
+    Client *client = (Client *)getClientById(clients, hs->client);
     if (!client)
       continue;
     if (strcmp(client->name, desc) == 0) {
@@ -66,10 +66,10 @@ get_software_sink_by_description(List sinks, List clients, const char *desc) {
   return nullptr;
 }
 
-extern "C" void software_sink_set_volume(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetVolume(PulseAudio &pa, SinkInput *sink,
                                          uint32_t volume) {
 
-  pa_volume_t new_volume = denormalize_volume(volume);
+  pa_volume_t new_volume = denormalizeVolume(volume);
 
   if (new_volume > PA_VOLUME_MAX) {
     new_volume = PA_VOLUME_MAX;
@@ -77,10 +77,10 @@ extern "C" void software_sink_set_volume(PulseAudio &pa, SoftwareSink *sink,
 
   pa_cvolume *new_cvolume =
       pa_cvolume_set(&sink->volume, sink->volume.channels, new_volume);
-  software_sink_set_cvolume(pa, sink, *new_cvolume);
+  sinkInputSetCVolume(pa, sink, *new_cvolume);
 }
 
-extern "C" void software_sink_set_cvolume(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetCVolume(PulseAudio &pa, SinkInput *sink,
                                           pa_cvolume cvol) {
   pa_operation *set = pa_context_set_sink_input_volume(
       pa.context, sink->id, &cvol, &onSuccess, nullptr);
@@ -92,7 +92,7 @@ extern "C" void software_sink_set_cvolume(PulseAudio &pa, SoftwareSink *sink,
   pa_operation_unref(get);
 }
 
-extern "C" void software_sink_set_mute(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink,
                                        bool mute) {
   pa_operation *op = pa_context_set_sink_input_mute(
       pa.context, sink->id, (int)mute, &onSuccess, nullptr);
@@ -100,7 +100,7 @@ extern "C" void software_sink_set_mute(PulseAudio &pa, SoftwareSink *sink,
   pa_operation_unref(op);
 }
 
-extern "C" void software_sink_set_hw_sink(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetSink(PulseAudio &pa, SinkInput *sink,
                                           uint32_t hw_sink) {
   pa_operation *set = pa_context_move_sink_input_by_index(
       pa.context, sink->id, hw_sink, &onSuccess, nullptr);
@@ -109,19 +109,19 @@ extern "C" void software_sink_set_hw_sink(PulseAudio &pa, SoftwareSink *sink,
   pa_operation_unref(set);
 }
 
-extern "C" void free_software_sink(SoftwareSink &sink) {
+extern "C" void freeSinkInput(SinkInput &sink) {
   free((void *)sink.name);
 }
 
-extern "C" void free_software_sinks(List &list) {
+extern "C" void freeSinkInputs(List &list) {
   if (!list.array)
     return;
   for (size_t i = 0; i < list.size; i++) {
-    if (list_get(list, i)) {
-      free_software_sink(*((SoftwareSink *)list_get(list, i)));
+    if (listGet(list, i)) {
+      freeSinkInput(*((SinkInput *)listGet(list, i)));
     }
   }
-  delete_list(list);
+  deleteList(list);
 }
 
 } // namespace Pulsebind

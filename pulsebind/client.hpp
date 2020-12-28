@@ -12,13 +12,13 @@ struct Client {
   uint32_t id;
 };
 
-extern "C" List get_clients(PulseAudio &p);
-extern "C" Client *get_client_by_name(List list, const char *name);
-extern "C" Client *get_client_by_id(List list, uint32_t index);
+extern "C" List getClients(PulseAudio &p);
+extern "C" Client *getClientByName(List list, const char *name);
+extern "C" Client *getClientById(List list, uint32_t index);
 
-extern "C" void free_client(Client &client);
+extern "C" void freeClient(Client &client);
 
-extern "C" void free_clients(List &list);
+extern "C" void freeClients(List &list);
 
 } // namespace Pulsebind
 #endif /* CLIENT_H */

@@ -1,6 +1,7 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+#include "pulseaudio.hpp"
 #include "sink.hpp"
 #include "softwareSink.hpp"
 #include "softwareSource.hpp"
@@ -8,17 +9,17 @@
 
 namespace Pulsebind {
 
-enum DeviceType { HW_SINK, SW_SINK, HW_SOURCE, SW_SOURCE, UNDEFINED };
+enum DeviceType { SINK, SINK_INPUT, SOURCE, SOURCE_OUTPUT, UNDEFINED };
 
 struct Device {
 
   DeviceType type;
 
   union {
-    HardwareSink *hw_sink;
-    HardwareSource *hw_source;
-    SoftwareSink *sw_sink;
-    SoftwareSource *sw_source;
+    Sink *sink;
+    Source *source;
+    SinkInput *sinkInput;
+    SourceOutput *sourceOutput;
   } device;
 };
 
@@ -35,9 +36,10 @@ extern "C" void deviceSetVolumePercent(PulseAudio &pa, Device &d,
 extern "C" void deviceSetVolume(PulseAudio &pa, Device &d, pa_cvolume &vol);
 
 extern "C" const char *formatDevice(PulseAudio &pa, Device &d, const char *fmt);
-extern "C" void printDevice(PulseAudio &pa, Device &d, const char* fmt);
+extern "C" void printDevice(PulseAudio &pa, Device &d, const char *fmt);
 
-
+extern "C" Device newDevice(PulseAudio &pa, DeviceType deviceT,
+                            void *deviceSrc);
 
 } // namespace Pulsebind
 

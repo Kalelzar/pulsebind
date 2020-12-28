@@ -1,5 +1,6 @@
 #include "device.hpp"
 #include "client.hpp"
+#include "pulseaudio.hpp"
 
 #include <cstdio>
 #include <cstring>
@@ -8,17 +9,17 @@ namespace Pulsebind {
 
 extern "C" uint32_t deviceGetID(Device &d) {
   switch (d.type) {
-  case HW_SINK:
-    return d.device.hw_sink->id;
+  case SINK:
+    return d.device.sink->id;
     break;
-  case HW_SOURCE:
-    return d.device.hw_source->id;
+  case SOURCE:
+    return d.device.source->id;
     break;
-  case SW_SINK:
-    return d.device.sw_sink->id;
+  case SINK_INPUT:
+    return d.device.sinkInput->id;
     break;
-  case SW_SOURCE:
-    return d.device.sw_source->id;
+  case SOURCE_OUTPUT:
+    return d.device.sourceOutput->id;
     break;
   case UNDEFINED:
     return UINT32_MAX;
@@ -31,17 +32,17 @@ extern "C" uint32_t deviceGetID(Device &d) {
 extern "C" const char *deviceGetName(Device &d) {
 
   switch (d.type) {
-  case HW_SINK:
-    return d.device.hw_sink->name;
+  case SINK:
+    return d.device.sink->name;
     break;
-  case HW_SOURCE:
-    return d.device.hw_source->name;
+  case SOURCE:
+    return d.device.source->name;
     break;
-  case SW_SINK:
-    return d.device.sw_sink->name;
+  case SINK_INPUT:
+    return d.device.sinkInput->name;
     break;
-  case SW_SOURCE:
-    return d.device.sw_source->name;
+  case SOURCE_OUTPUT:
+    return d.device.sourceOutput->name;
     break;
   case UNDEFINED:
     return nullptr;
@@ -53,18 +54,18 @@ extern "C" const char *deviceGetName(Device &d) {
 
 extern "C" const char *deviceGetDescription(Device &d, const List clients) {
   switch (d.type) {
-  case HW_SINK:
-    return d.device.hw_sink->description;
+  case SINK:
+    return d.device.sink->description;
     break;
-  case HW_SOURCE:
-    return d.device.hw_source->description;
+  case SOURCE:
+    return d.device.source->description;
     break;
-  case SW_SINK:
-    return ((Client *)get_client_by_id(clients, d.device.sw_sink->client))
+  case SINK_INPUT:
+    return ((Client *)getClientById(clients, d.device.sinkInput->client))
         ->name;
     break;
-  case SW_SOURCE:
-    return ((Client *)get_client_by_id(clients, d.device.sw_source->client))
+  case SOURCE_OUTPUT:
+    return ((Client *)getClientById(clients, d.device.sourceOutput->client))
         ->name;
     break;
   case UNDEFINED:
@@ -77,17 +78,17 @@ extern "C" const char *deviceGetDescription(Device &d, const List clients) {
 
 extern "C" bool deviceGetMute(Device &d) {
   switch (d.type) {
-  case HW_SINK:
-    return d.device.hw_sink->mute;
+  case SINK:
+    return d.device.sink->mute;
     break;
-  case HW_SOURCE:
-    return d.device.hw_source->mute;
+  case SOURCE:
+    return d.device.source->mute;
     break;
-  case SW_SINK:
-    return d.device.sw_sink->mute;
+  case SINK_INPUT:
+    return d.device.sinkInput->mute;
     break;
-  case SW_SOURCE:
-    return d.device.sw_source->mute;
+  case SOURCE_OUTPUT:
+    return d.device.sourceOutput->mute;
     break;
   case UNDEFINED:
     return true;
@@ -99,17 +100,17 @@ extern "C" bool deviceGetMute(Device &d) {
 
 extern "C" int deviceGetVolumePercent(Device &d) {
   switch (d.type) {
-  case HW_SINK:
-    return d.device.hw_sink->volumePercent;
+  case SINK:
+    return d.device.sink->volumePercent;
     break;
-  case HW_SOURCE:
-    return d.device.hw_source->volumePercent;
+  case SOURCE:
+    return d.device.source->volumePercent;
     break;
-  case SW_SINK:
-    return d.device.sw_sink->volumePercent;
+  case SINK_INPUT:
+    return d.device.sinkInput->volumePercent;
     break;
-  case SW_SOURCE:
-    return d.device.sw_source->volumePercent;
+  case SOURCE_OUTPUT:
+    return d.device.sourceOutput->volumePercent;
     break;
   case UNDEFINED:
     return -1;
@@ -121,17 +122,17 @@ extern "C" int deviceGetVolumePercent(Device &d) {
 
 extern "C" pa_cvolume deviceGetVolume(Device &d) {
   switch (d.type) {
-  case HW_SINK:
-    return d.device.hw_sink->volume;
+  case SINK:
+    return d.device.sink->volume;
     break;
-  case HW_SOURCE:
-    return d.device.hw_source->volume;
+  case SOURCE:
+    return d.device.source->volume;
     break;
-  case SW_SINK:
-    return d.device.sw_sink->volume;
+  case SINK_INPUT:
+    return d.device.sinkInput->volume;
     break;
-  case SW_SOURCE:
-    return d.device.sw_source->volume;
+  case SOURCE_OUTPUT:
+    return d.device.sourceOutput->volume;
     break;
   default:
     return *((pa_cvolume *)0xdeadbeef);
@@ -142,17 +143,17 @@ extern "C" pa_cvolume deviceGetVolume(Device &d) {
 
 extern "C" void deviceSetMute(PulseAudio &pa, Device &d, const bool mute) {
   switch (d.type) {
-  case HW_SINK:
-    hardware_sink_set_mute(pa, d.device.hw_sink, mute);
+  case SINK:
+    sinkSetMute(pa, d.device.sink, mute);
     break;
-  case HW_SOURCE:
-    hardware_source_set_mute(pa, d.device.hw_source, mute);
+  case SOURCE:
+    sourceSetMute(pa, d.device.source, mute);
     break;
-  case SW_SINK:
-    software_sink_set_mute(pa, d.device.sw_sink, mute);
+  case SINK_INPUT:
+    sinkInputSetMute(pa, d.device.sinkInput, mute);
     break;
-  case SW_SOURCE:
-    software_source_set_mute(pa, d.device.sw_source, mute);
+  case SOURCE_OUTPUT:
+    sourceOutputSetMute(pa, d.device.sourceOutput, mute);
     break;
   case UNDEFINED:
     break;
@@ -162,17 +163,17 @@ extern "C" void deviceSetMute(PulseAudio &pa, Device &d, const bool mute) {
 extern "C" void deviceSetVolumePercent(PulseAudio &pa, Device &d,
                                        const int vol) {
   switch (d.type) {
-  case HW_SINK:
-    hardware_sink_set_volume(pa, d.device.hw_sink, vol);
+  case SINK:
+    sinkSetVolume(pa, d.device.sink, vol);
     break;
-  case HW_SOURCE:
-    hardware_source_set_volume(pa, d.device.hw_source, vol);
+  case SOURCE:
+    sourceSetVolume(pa, d.device.source, vol);
     break;
-  case SW_SINK:
-    software_sink_set_volume(pa, d.device.sw_sink, vol);
+  case SINK_INPUT:
+    sinkInputSetVolume(pa, d.device.sinkInput, vol);
     break;
-  case SW_SOURCE:
-    software_source_set_volume(pa, d.device.sw_source, vol);
+  case SOURCE_OUTPUT:
+    sourceOutputSetVolume(pa, d.device.sourceOutput, vol);
     break;
   case UNDEFINED:
     break;
@@ -182,17 +183,17 @@ extern "C" void deviceSetVolumePercent(PulseAudio &pa, Device &d,
 extern "C" void deviceSetVolume(PulseAudio &pa, Device &d,
                                 pa_cvolume &cvolume) {
   switch (d.type) {
-  case HW_SINK:
-    hardware_sink_set_cvolume(pa, d.device.hw_sink, cvolume);
+  case SINK:
+    sinkSetCVolume(pa, d.device.sink, cvolume);
     break;
-  case HW_SOURCE:
-    hardware_source_set_cvolume(pa, d.device.hw_source, cvolume);
+  case SOURCE:
+    sourceSetCVolume(pa, d.device.source, cvolume);
     break;
-  case SW_SINK:
-    software_sink_set_cvolume(pa, d.device.sw_sink, cvolume);
+  case SINK_INPUT:
+    sinkInputSetCVolume(pa, d.device.sinkInput, cvolume);
     break;
-  case SW_SOURCE:
-    software_source_set_cvolume(pa, d.device.sw_source, cvolume);
+  case SOURCE_OUTPUT:
+    sourceOutputSetCVolume(pa, d.device.sourceOutput, cvolume);
     break;
   case UNDEFINED:
     break;
@@ -223,7 +224,7 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
 
   size_t point = 0;
 
-  List clients = get_clients(pa);
+  List clients = getClients(pa);
 
   for (size_t i = 0; i < fmtl; i++) {
 
@@ -247,25 +248,25 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
         break;
       case 't':
         switch (d.type) {
-        case DeviceType::HW_SINK:
-          strncpy(str+point, "Sink", 4);
-          point+=4;
+        case DeviceType::SINK:
+          strncpy(str + point, "Sink", 4);
+          point += 4;
           break;
-        case DeviceType::HW_SOURCE:
-          strncpy(str+point, "Source", 6);
-          point+=6;
+        case DeviceType::SOURCE:
+          strncpy(str + point, "Source", 6);
+          point += 6;
           break;
-        case DeviceType::SW_SOURCE:
-          strncpy(str+point, "Source Output", 13);
-          point+=13;
+        case DeviceType::SOURCE_OUTPUT:
+          strncpy(str + point, "Source Output", 13);
+          point += 13;
           break;
-        case DeviceType::SW_SINK:
-          strncpy(str+point, "Sink Input", 10);
-          point+=10;
+        case DeviceType::SINK_INPUT:
+          strncpy(str + point, "Sink Input", 10);
+          point += 10;
           break;
         case DeviceType::UNDEFINED:
-          strncpy(str+point, "Undefined", 9);
-          point+=9;
+          strncpy(str + point, "Undefined", 9);
+          point += 9;
           break;
         }
         break;
@@ -299,7 +300,7 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
         cv = deviceGetVolume(d);
         for (int c = 0; c < cv.channels; c++) {
           point += snprintf(str + point, 4096 - point, "%d",
-                            normalize_volume(cv.values[c]));
+                            normalizeVolume(cv.values[c]));
           if (c + 1 != cv.channels) {
             str[point++] = ' ';
           }
@@ -311,18 +312,18 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
         point += snprintf(str + point, 4096 - point, "%u", cv.channels);
         break;
       case 'C':
-        if (d.type == DeviceType::SW_SOURCE || d.type == DeviceType::SW_SINK) {
+        if (d.type == DeviceType::SOURCE_OUTPUT || d.type == DeviceType::SINK_INPUT) {
           point += snprintf(str + point, 4096 - point, "%u",
-                            d.device.sw_sink->client);
+                            d.device.sinkInput->client);
         }
         break;
       case 's':
-        if (d.type == DeviceType::SW_SOURCE || d.type == DeviceType::SW_SINK) {
+        if (d.type == DeviceType::SOURCE_OUTPUT || d.type == DeviceType::SINK_INPUT) {
           point +=
-              snprintf(str + point, 4096 - point, "%u", d.device.sw_sink->sink);
+              snprintf(str + point, 4096 - point, "%u", d.device.sinkInput->sink);
         } else {
           point +=
-              snprintf(str + point, 4096 - point, "%u", d.device.hw_sink->id);
+              snprintf(str + point, 4096 - point, "%u", d.device.sink->id);
         }
         break;
       default:
@@ -334,7 +335,7 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
 
   str[point] = '\0';
 
-  free_clients(clients);
+  freeClients(clients);
   return str;
 };
 
@@ -342,6 +343,29 @@ extern "C" void printDevice(PulseAudio &pa, Device &d, const char *fmt) {
   const char *str = formatDevice(pa, d, fmt);
   printf("%s", str);
   free((void *)str);
+}
+
+extern "C" Device newDevice(PulseAudio &pa, DeviceType deviceT,
+                            void *deviceSrc) {
+  Device d;
+  d.type = deviceT;
+  switch (deviceT) {
+  case SINK:
+    d.device.sink = (Sink *)deviceSrc;
+    break;
+  case SINK_INPUT:
+    d.device.sinkInput = (SinkInput *)deviceSrc;
+    break;
+  case SOURCE:
+    d.device.source = (Source *)deviceSrc;
+    break;
+  case SOURCE_OUTPUT:
+    d.device.sourceOutput = (SourceOutput *)deviceSrc;
+    break;
+  case UNDEFINED:
+    break;
+  }
+  return d;
 }
 
 } // namespace Pulsebind

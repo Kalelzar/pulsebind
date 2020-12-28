@@ -6,7 +6,7 @@
 
 namespace Pulsebind {
 
-struct SoftwareSink {
+struct SinkInput {
   uint32_t id;
   uint32_t sink;
   uint32_t client;
@@ -17,25 +17,25 @@ struct SoftwareSink {
   int volumePercent;
 };
 
-extern "C" List get_software_sinks(PulseAudio &p);
-extern "C" SoftwareSink *get_software_sink_by_name(List list, const char *name);
-extern "C" SoftwareSink *get_software_sink_by_id(List list, uint32_t index);
-extern "C" SoftwareSink *
-get_software_sink_by_description(List sinks, List clients, const char *desc);
+extern "C" List getSinkInputs(PulseAudio &p);
+extern "C" SinkInput *getSinkInputByName(List list, const char *name);
+extern "C" SinkInput *getSinkInputById(List list, uint32_t index);
+extern "C" SinkInput *
+getSinkInputByDescription(List sinks, List clients, const char *desc);
 
-extern "C" void software_sink_set_volume(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetVolume(PulseAudio &pa, SinkInput *sink,
                                          uint32_t volume);
-extern "C" void software_sink_set_cvolume(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetCVolume(PulseAudio &pa, SinkInput *sink,
                                           pa_cvolume cvol);
-extern "C" void software_sink_set_mute(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetMute(PulseAudio &pa, SinkInput *sink,
                                        bool mute);
 
-extern "C" void software_sink_set_hw_sink(PulseAudio &pa, SoftwareSink *sink,
+extern "C" void sinkInputSetSink(PulseAudio &pa, SinkInput *sink,
                                           uint32_t hw_sink);
 
-extern "C" void free_software_sink(SoftwareSink &sink);
+extern "C" void freeSinkInput(SinkInput &sink);
 
-extern "C" void free_software_sinks(List &list);
+extern "C" void freeSinkInputs(List &list);
 
 } // namespace Pulsebind
 

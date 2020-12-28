@@ -30,6 +30,5 @@ set_target_properties(pulsebind
   PUBLIC_HEADER "${HEADERS}")
 
 install(TARGETS pulsebind
-  CONFIGURATIONS Release
   LIBRARY DESTINATION
   PUBLIC_HEADER DESTINATION include/pulsebind)

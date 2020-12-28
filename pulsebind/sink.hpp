@@ -6,7 +6,7 @@
 
 namespace Pulsebind {
 
-struct HardwareSink {
+struct Sink {
   uint32_t id;
   const char *name;
   const char *description;
@@ -17,26 +17,26 @@ struct HardwareSink {
   int volumePercent;
 };
 
-extern "C" List get_hardware_sinks(PulseAudio &p);
-extern "C" HardwareSink *get_hardware_sink_by_name(List list, const char *name);
-extern "C" HardwareSink *get_hardware_sink_by_id(List list, uint32_t index);
-extern "C" HardwareSink *get_hardware_sink_by_description(List list,
+extern "C" List getSinks(PulseAudio &p);
+extern "C" Sink *getSinkByName(List list, const char *name);
+extern "C" Sink *getSinkById(List list, uint32_t index);
+extern "C" Sink *getSinkByDescription(List list,
                                                           const char *desc);
 
-extern "C" void hardware_sink_set_volume(PulseAudio &pa, HardwareSink *sink,
+extern "C" void sinkSetVolume(PulseAudio &pa, Sink *sink,
                                          uint32_t volume);
-extern "C" void hardware_sink_set_cvolume(PulseAudio &pa, HardwareSink *sink,
+extern "C" void sinkSetCVolume(PulseAudio &pa, Sink *sink,
                                           pa_cvolume cvol);
 
-extern "C" void hardware_sink_set_mute(PulseAudio &pa, HardwareSink *sink,
+extern "C" void sinkSetMute(PulseAudio &pa, Sink *sink,
                                        bool mute);
 
-extern "C" void free_hardware_sink(HardwareSink &sink);
+extern "C" void freeSink(Sink &sink);
 
-extern "C" void free_hardware_sinks(List &list);
+extern "C" void freeSinks(List &list);
 
-extern "C" int normalize_volume(pa_volume_t t);
-extern "C" pa_volume_t denormalize_volume(int v);
+extern "C" int normalizeVolume(pa_volume_t t);
+extern "C" pa_volume_t denormalizeVolume(int v);
 
 } // namespace Pulsebind
 

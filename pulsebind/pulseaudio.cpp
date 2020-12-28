@@ -3,7 +3,7 @@
 
 namespace Pulsebind {
 
-extern "C" PulseAudio new_pulse(const char *client) noexcept {
+extern "C" PulseAudio newPulse(const char *client) noexcept {
   PulseAudio pa;
 
   pa.mainloop = pa_mainloop_new();
@@ -28,7 +28,7 @@ extern "C" PulseAudio new_pulse(const char *client) noexcept {
   return pa;
 }
 
-extern "C" void delete_pulse(PulseAudio &pa) noexcept {
+extern "C" void deletePulse(PulseAudio &pa) noexcept {
   pa_context_set_state_callback(pa.context, nullptr, nullptr);
 
   if (pa.state == CONNECTED)

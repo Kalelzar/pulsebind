@@ -4,8 +4,8 @@
 #include "callback.hpp"
 
 namespace Pulsebind {
-extern "C" List get_clients(PulseAudio &pa) {
-  List l = new_list(4);
+extern "C" List getClients(PulseAudio &pa) {
+  List l = newList(4);
   pa_operation *op =
       pa_context_get_client_info_list(pa.context, &onClientInfo, &l);
 
@@ -16,9 +16,9 @@ extern "C" List get_clients(PulseAudio &pa) {
   return l;
 }
 
-extern "C" Client *get_client_by_name(List list, const char *name) {
+extern "C" Client *getClientByName(List list, const char *name) {
   for (size_t i = 0; i < list.size; i++) {
-    Client *hs = (Client *)list_get(list, i);
+    Client *hs = (Client *)listGet(list, i);
     if (strcmp(hs->name, name) == 0) {
       return hs;
     }
@@ -27,9 +27,9 @@ extern "C" Client *get_client_by_name(List list, const char *name) {
   return nullptr;
 }
 
-extern "C" Client *get_client_by_id(List list, uint32_t index){
+extern "C" Client *getClientById(List list, uint32_t index){
   for (size_t i = 0; i < list.size; i++) {
-    Client *hs = (Client *)list_get(list, i);
+    Client *hs = (Client *)listGet(list, i);
     if (hs->id == index) {
       return hs;
     }
@@ -38,17 +38,17 @@ extern "C" Client *get_client_by_id(List list, uint32_t index){
   return nullptr;
 }
 
-extern "C" void free_client(Client &client){
+extern "C" void freeClient(Client &client){
   free((void *)client.name);
 }
 
-extern "C" void free_clients(List &list){
+extern "C" void freeClients(List &list){
   for (size_t i = 0; i < list.size; i++) {
-    if (list_get(list, i)) {
-      free_client(*((Client*)list_get(list, i)));
+    if (listGet(list, i)) {
+      freeClient(*((Client*)listGet(list, i)));
     }
   }
-  delete_list(list);
+  deleteList(list);
 }
 
 

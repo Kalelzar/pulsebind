@@ -30,13 +30,13 @@ struct PulseAudio {
  * else it will be CONNECTED
  * @param client
  */
-extern "C" PulseAudio new_pulse(const char *client) noexcept;
+extern "C" PulseAudio newPulse(const char *client) noexcept;
 
 /**
  * Disconnect and free all necessary components.
  * @param p the connection to end.
  */
-extern "C" void delete_pulse(PulseAudio &p) noexcept;
+extern "C" void deletePulse(PulseAudio &p) noexcept;
 
 void iterate(PulseAudio &pa, pa_operation *op) noexcept;
 

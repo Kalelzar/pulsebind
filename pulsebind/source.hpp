@@ -6,7 +6,7 @@
 
 namespace Pulsebind {
 
-struct HardwareSource {
+struct Source {
   uint32_t id;
   const char *name;
   const char *description;
@@ -17,25 +17,25 @@ struct HardwareSource {
   int volumePercent;
 };
 
-extern "C" List get_hardware_sources(PulseAudio &p);
-extern "C" HardwareSource *get_hardware_source_by_name(List list,
+extern "C" List getSources(PulseAudio &p);
+extern "C" Source *getSourceByName(List list,
                                                        const char *name);
-extern "C" HardwareSource *get_hardware_source_by_id(List list, uint32_t index);
-extern "C" HardwareSource *get_hardware_source_by_description(List list,
+extern "C" Source *getSourceById(List list, uint32_t index);
+extern "C" Source *getSourceByDescription(List list,
                                                               const char *desc);
 
-extern "C" void hardware_source_set_volume(PulseAudio &pa,
-                                           HardwareSource *source,
+extern "C" void sourceSetVolume(PulseAudio &pa,
+                                           Source *source,
                                            uint32_t volume);
-extern "C" void hardware_source_set_cvolume(PulseAudio &pa,
-                                            HardwareSource *source,
+extern "C" void sourceSetCVolume(PulseAudio &pa,
+                                            Source *source,
                                             pa_cvolume cvol);
-extern "C" void hardware_source_set_mute(PulseAudio &pa, HardwareSource *source,
+extern "C" void sourceSetMute(PulseAudio &pa, Source *source,
                                          bool mute);
 
-extern "C" void free_hardware_source(HardwareSource &source);
+extern "C" void freeSource(Source &source);
 
-extern "C" void free_hardware_sources(List &list);
+extern "C" void freeSources(List &list);
 
 } // namespace Pulsebind
 

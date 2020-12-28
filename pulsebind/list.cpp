@@ -1,7 +1,7 @@
 #include "list.hpp"
 #include <cstring>
 
-extern "C" List new_list(size_t capacity) {
+extern "C" List newList(size_t capacity) {
   List list;
   list.capacity = capacity;
   list.size = 0;
@@ -9,7 +9,7 @@ extern "C" List new_list(size_t capacity) {
   return list;
 }
 
-inline void expand_list(List &list) {
+inline void expandList(List &list) {
   if (!list.array)
     return;
   int newCapacity = list.capacity ? list.capacity * 2 : 4;
@@ -19,19 +19,19 @@ inline void expand_list(List &list) {
   list.capacity = newCapacity;
 }
 
-extern "C" void list_add(List &list, void *data) {
+extern "C" void listAdd(List &list, void *data) {
   if (!list.array)
     return;
 
   if (list.size + 1 >= list.capacity) {
-    expand_list(list);
+    expandList(list);
     if(list.size + 1 >= list.capacity) return;
   }
 
   list.array[list.size++] = data;
 }
 
-extern "C" void delete_list(List &list) {
+extern "C" void deleteList(List &list) {
   if (!list.array)
     return;
   for (size_t i = 0; i < list.size; i++) {
@@ -41,7 +41,7 @@ extern "C" void delete_list(List &list) {
   list.array = nullptr;
 }
 
-extern "C" void *list_get(List &list, size_t index) {
+extern "C" void *listGet(List &list, size_t index) {
   if (!list.array)
     return nullptr;
   return list.array[index];
