@@ -13,7 +13,7 @@ enum DeviceType { SINK, SINK_INPUT, SOURCE, SOURCE_OUTPUT, UNDEFINED };
 
 struct Device {
 
-  DeviceType type;
+  DeviceType type = UNDEFINED;
 
   union {
     Sink *sink;

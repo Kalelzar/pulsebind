@@ -61,8 +61,7 @@ extern "C" const char *deviceGetDescription(Device &d, const List clients) {
     return d.device.source->description;
     break;
   case SINK_INPUT:
-    return ((Client *)getClientById(clients, d.device.sinkInput->client))
-        ->name;
+    return ((Client *)getClientById(clients, d.device.sinkInput->client))->name;
     break;
   case SOURCE_OUTPUT:
     return ((Client *)getClientById(clients, d.device.sourceOutput->client))
@@ -314,18 +313,19 @@ extern "C" const char *formatDevice(PulseAudio &pa, Device &d,
         point += snprintf(str + point, 4096 - point, "%u", cv.channels);
         break;
       case 'C':
-        if (d.type == DeviceType::SOURCE_OUTPUT || d.type == DeviceType::SINK_INPUT) {
+        if (d.type == DeviceType::SOURCE_OUTPUT ||
+            d.type == DeviceType::SINK_INPUT) {
           point += snprintf(str + point, 4096 - point, "%u",
                             d.device.sinkInput->client);
         }
         break;
       case 's':
-        if (d.type == DeviceType::SOURCE_OUTPUT || d.type == DeviceType::SINK_INPUT) {
-          point +=
-              snprintf(str + point, 4096 - point, "%u", d.device.sinkInput->sink);
+        if (d.type == DeviceType::SOURCE_OUTPUT ||
+            d.type == DeviceType::SINK_INPUT) {
+          point += snprintf(str + point, 4096 - point, "%u",
+                            d.device.sinkInput->sink);
         } else {
-          point +=
-              snprintf(str + point, 4096 - point, "%u", d.device.sink->id);
+          point += snprintf(str + point, 4096 - point, "%u", d.device.sink->id);
         }
         break;
       default:
